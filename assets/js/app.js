@@ -28,6 +28,15 @@
   const DIAMOND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z M3 9h18 M10 4 8.5 9 12 20l3.5-11L14 4"/></svg>';
   const ICONS = {
     bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
+    heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/></svg>',
+    heartFill: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 8.5V7c0-.8.5-1.3 1.3-1.3H17V3h-2.4C12.3 3 11 4.5 11 6.7v1.8H8.5V11H11v10h3V11h2.6l.4-2.5Z"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 3v11.5a3.5 3.5 0 1 1-3-3.46M14 3c.4 2.6 2.2 4.3 5 4.5"/></svg>',
+    chevR: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m9 5 7 7-7 7"/></svg>',
+    chevL: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m15 5-7 7 7 7"/></svg>',
+    access: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="4.2" r="2"/><path d="M4 7.5 12 9l8-1.5.5 1.9-5.5 1.6V14l2.2 7-1.9.6L13 15h-2l-2.3 6.6-1.9-.6L9 14v-3L3.5 9.4z"/></svg>',
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     wa: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8Zm8.4-18.2A11.8 11.8 0 0 0 1.7 17.8L0 24l6.4-1.7A11.8 11.8 0 0 0 24 12a11.7 11.7 0 0 0-3.6-8.4Z"/></svg>',
@@ -51,29 +60,86 @@
     toast(`${byId(id).name} נוסף לסל`);
   }
 
+  /* ───────── מועדפים ───────── */
+  const WKEY = "ellie-wish-v1";
+  let wish = [];
+  try { wish = JSON.parse(localStorage.getItem(WKEY)) || []; } catch (e) { wish = []; }
+  wish = wish.filter((id) => byId(id));
+  const saveWish = () => { try { localStorage.setItem(WKEY, JSON.stringify(wish)); } catch (e) {} };
+  const inWish = (id) => wish.includes(id);
+  const wishBtn = (id, cls = "wish-btn") =>
+    `<button class="${cls}${inWish(id) ? " on" : ""}" data-wish="${id}" aria-pressed="${inWish(id)}" aria-label="שמירה למועדפים">${inWish(id) ? ICONS.heartFill : ICONS.heart}</button>`;
+  function toggleWish(id) {
+    const i = wish.indexOf(id);
+    if (i > -1) wish.splice(i, 1); else wish.push(id);
+    saveWish(); syncWish();
+    toast(i > -1 ? "הוסר מהמועדפים" : "נשמר במועדפים ♥");
+  }
+  function syncWish() {
+    const c = $(".wish-count");
+    if (c) { c.textContent = wish.length; c.classList.toggle("has", wish.length > 0); }
+    $$("[data-wish]").forEach((b) => {
+      const on = inWish(b.dataset.wish);
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
+      b.innerHTML = on ? ICONS.heartFill : ICONS.heart;
+    });
+    if (document.body.dataset.page === "wishlist") wishlistPage();
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-wish]");
+    if (b) { e.preventDefault(); toggleWish(b.dataset.wish); }
+  });
+
+  /* ───────── חיפוש ───────── */
+  const norm = (t) => String(t).toLowerCase().replace(/[״"׳'\-–]/g, " ");
+  function searchText(p) {
+    const c = CATEGORIES[p.category];
+    return norm([p.name, c.name, (c.subs || {})[p.sub] || "", p.description || "", ...(p.options || []).flatMap((o) => o.values)].join(" "));
+  }
+  const findProducts = (q) => {
+    const terms = norm(q).split(/\s+/).filter(Boolean);
+    return terms.length ? PRODUCTS.filter((p) => { const t = searchText(p); return terms.every((w) => t.includes(w)); }) : [];
+  };
+
   /* ───────── מבנה משותף לכל העמודים ───────── */
   function layout() {
     const page = document.body.dataset.page;
     const cat = new URLSearchParams(location.search).get("cat");
     const cur = (p, c) => (page === p && (c === undefined || c === cat) ? ' aria-current="page"' : "");
 
+    const socials = [["instagram", "אינסטגרם"], ["facebook", "פייסבוק"], ["tiktok", "טיקטוק"]]
+      .filter(([k]) => SITE[k])
+      .map(([k, n]) => `<a class="icon-btn social" href="${esc(SITE[k])}" target="_blank" rel="noopener" aria-label="${n}">${ICONS[k]}</a>`).join("");
+
     document.body.insertAdjacentHTML("afterbegin", `
       <a class="skip-link" href="#main">דלג לתוכן</a>
-      <div class="announce">תכשיטים שמספרים את הסיפור שלך ✦ הזמנה קלה בוואטסאפ</div>
+      <div class="announce"><span id="announce-text">${esc(SITE.announcements[0] || "")}</span></div>
       <header class="header">
         <div class="container header__row">
-          <div style="display:flex;align-items:center;gap:8px">
+          <div class="header__start">
             <button class="icon-btn menu-toggle" aria-label="תפריט" aria-expanded="false">${ICONS.menu}</button>
             <nav class="nav" aria-label="ראשי">
               <a href="index.html"${cur("home")}>ראשי</a>
-              <a href="shop.html?cat=necklaces"${cur("shop", "necklaces")}>שרשראות</a>
-              <a href="shop.html?cat=earrings"${cur("shop", "earrings")}>עגילים</a>
+              ${Object.entries(CATEGORIES).map(([k, c]) => `
+              <div class="nav__item">
+                <a href="shop.html?cat=${k}"${cur("shop", k)}>${c.name}</a>
+                <button class="nav__expand" aria-expanded="false" aria-label="תתי-קטגוריות של ${c.name}">+</button>
+                <div class="mega">
+                  <a href="shop.html?cat=${k}">כל ה${c.name}</a>
+                  ${Object.entries(c.subs || {}).map(([sk, sn]) => `<a href="shop.html?cat=${k}&sub=${sk}">${sn}</a>`).join("")}
+                </div>
+              </div>`).join("")}
               <a href="shop.html"${page === "shop" && !cat ? ' aria-current="page"' : ""}>כל התכשיטים</a>
+              <a href="index.html#faq">שאלות נפוצות</a>
             </nav>
           </div>
           <a class="logo" href="index.html" aria-label="Ellie Jewelry – לדף הבית"><img src="assets/img/logo.webp" alt="Ellie Jewelry"></a>
           <div class="header__actions">
-            <button class="icon-btn" id="cart-btn" aria-label="סל הקניות">${ICONS.bag}<span class="cart-count"></span></button>
+            ${socials}
+            <a class="icon-btn social" href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener" aria-label="וואטסאפ">${ICONS.wa}</a>
+            <button class="icon-btn" id="search-btn" aria-label="חיפוש">${ICONS.search}</button>
+            <a class="icon-btn" href="wishlist.html" aria-label="המועדפים שלי">${ICONS.heart}<span class="cart-count wish-count"></span></a>
+            <button class="icon-btn" id="cart-btn" aria-label="סל הקניות">${ICONS.bag}<span class="cart-count bag-count"></span></button>
           </div>
         </div>
       </header>`);
@@ -94,11 +160,22 @@
             </ul>
           </div>
           <div>
+            <h4>מידע</h4>
+            <ul>
+              <li><a href="index.html#faq">שאלות נפוצות</a></li>
+              <li><a href="shipping.html">משלוחים והחזרות</a></li>
+              <li><a href="terms.html">תקנון האתר</a></li>
+              <li><a href="accessibility.html">הצהרת נגישות</a></li>
+            </ul>
+          </div>
+          <div>
             <h4>יצירת קשר</h4>
             <ul>
-              <li><a href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener">וואטסאפ: 050-589-9955</a></li>
-              <li><a href="tel:+${WHATSAPP_NUMBER}">טלפון: 050-589-9955</a></li>
+              <li><a href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener">וואטסאפ: ${SITE.phoneDisplay}</a></li>
+              <li><a href="tel:+${WHATSAPP_NUMBER}">טלפון: ${SITE.phoneDisplay}</a></li>
+              ${SITE.email ? `<li><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a></li>` : ""}
             </ul>
+            ${socials ? `<div class="footer__socials">${socials}</div>` : ""}
           </div>
         </div>
         <div class="container footer__bottom">© ${new Date().getFullYear()} Ellie Jewelry. כל הזכויות שמורות.</div>
@@ -115,7 +192,27 @@
         <div class="drawer__body" id="drawer-body"></div>
         <div class="drawer__foot" id="drawer-foot"></div>
       </aside>
-      <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="search" id="search" role="dialog" aria-modal="true" aria-label="חיפוש באתר" hidden>
+        <div class="search__box">
+          <form class="search__form" id="search-form" role="search">
+            ${ICONS.search}
+            <input id="search-input" type="search" placeholder="מה תרצי לחפש? טניס, הליקס, רוז גולד..." autocomplete="off" aria-label="חיפוש">
+            <button class="icon-btn" type="button" id="search-close" aria-label="סגירת חיפוש">${ICONS.close}</button>
+          </form>
+          <div class="search__results" id="search-results"></div>
+        </div>
+      </div>
+      <button class="a11y-btn" id="a11y-btn" aria-label="תפריט נגישות" aria-expanded="false" aria-controls="a11y-panel">${ICONS.access}</button>
+      <div class="a11y-panel" id="a11y-panel" hidden>
+        <h3>נגישות</h3>
+        <button data-a11y="text">הגדלת טקסט</button>
+        <button data-a11y="contrast">ניגודיות גבוהה</button>
+        <button data-a11y="links">הדגשת קישורים</button>
+        <button data-a11y="still">עצירת אנימציות</button>
+        <button data-a11y="reset">איפוס</button>
+        <a href="accessibility.html">הצהרת נגישות</a>
+      </div>`);
 
     $("#cart-btn").addEventListener("click", openCart);
     $("#drawer-close").addEventListener("click", closeAll);
@@ -127,6 +224,62 @@
       nav.classList.toggle("open", open); $("#overlay").classList.toggle("open", open);
       mt.setAttribute("aria-expanded", open);
     });
+    $$(".nav__expand").forEach((b) => b.addEventListener("click", () => {
+      const item = b.closest(".nav__item"), open = !item.classList.contains("open");
+      item.classList.toggle("open", open); b.setAttribute("aria-expanded", open); b.textContent = open ? "−" : "+";
+    }));
+
+    // פס הודעות מתחלף
+    const msgs = SITE.announcements || [];
+    if (msgs.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      let i = 0; const el = $("#announce-text");
+      setInterval(() => {
+        el.classList.add("fade");
+        setTimeout(() => { i = (i + 1) % msgs.length; el.textContent = msgs[i]; el.classList.remove("fade"); }, 350);
+      }, 4500);
+    }
+
+    // חיפוש
+    const sBox = $("#search"), sIn = $("#search-input"), sRes = $("#search-results");
+    const openSearch = () => { sBox.hidden = false; requestAnimationFrame(() => sBox.classList.add("open")); sIn.focus(); };
+    const closeSearch = () => { sBox.classList.remove("open"); setTimeout(() => (sBox.hidden = true), 250); };
+    $("#search-btn").addEventListener("click", openSearch);
+    $("#search-close").addEventListener("click", closeSearch);
+    sBox.addEventListener("click", (e) => e.target === sBox && closeSearch());
+    document.addEventListener("keydown", (e) => e.key === "Escape" && !sBox.hidden && closeSearch());
+    sIn.addEventListener("input", () => {
+      const q = sIn.value.trim();
+      if (!q) { sRes.innerHTML = ""; return; }
+      const list = findProducts(q);
+      sRes.innerHTML = list.length
+        ? list.slice(0, 6).map((p) => `<a class="search__item" href="product.html?id=${p.id}"><span class="search__img">${imgTag(p.images[0], "", "")}</span><span>${esc(p.name)}</span><span class="price">${money(p.price)}</span></a>`).join("") +
+          (list.length > 6 ? `<a class="search__all" href="shop.html?q=${encodeURIComponent(q)}">לכל ${list.length} התוצאות</a>` : "")
+        : `<p class="search__empty">לא נמצאו תכשיטים עבור "${esc(q)}"</p>`;
+    });
+    $("#search-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const q = sIn.value.trim(); if (q) location.href = `shop.html?q=${encodeURIComponent(q)}`;
+    });
+
+    // תפריט נגישות
+    const A11Y_KEY = "ellie-a11y";
+    let a11y = {};
+    try { a11y = JSON.parse(localStorage.getItem(A11Y_KEY)) || {}; } catch (e) {}
+    const applyA11y = () => {
+      const h = document.documentElement;
+      h.classList.toggle("a11y-text", !!a11y.text); h.classList.toggle("a11y-contrast", !!a11y.contrast);
+      h.classList.toggle("a11y-links", !!a11y.links); h.classList.toggle("a11y-still", !!a11y.still);
+      $$("[data-a11y]").forEach((b) => b.dataset.a11y !== "reset" && b.setAttribute("aria-pressed", !!a11y[b.dataset.a11y]));
+    };
+    applyA11y();
+    const panel = $("#a11y-panel"), ab = $("#a11y-btn");
+    ab.addEventListener("click", () => { panel.hidden = !panel.hidden; ab.setAttribute("aria-expanded", !panel.hidden); });
+    $$("[data-a11y]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.a11y;
+      if (k === "reset") a11y = {}; else a11y[k] = !a11y[k];
+      try { localStorage.setItem(A11Y_KEY, JSON.stringify(a11y)); } catch (e) {}
+      applyA11y();
+    }));
   }
 
   function openCart() {
@@ -141,7 +294,7 @@
   }
 
   function bumpCount() {
-    const el = $(".cart-count"); el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
+    const el = $(".bag-count"); el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump");
   }
 
   let toastTimer;
@@ -155,7 +308,7 @@
   const optText = (opts) => Object.entries(opts).map(([k, v]) => `${k}: ${v}`).join(" · ");
 
   function renderCart() {
-    const n = cartCount(), cc = $(".cart-count");
+    const n = cartCount(), cc = $(".bag-count");
     cc.textContent = n; cc.classList.toggle("has", n > 0);
     const body = $("#drawer-body"), foot = $("#drawer-foot");
 
@@ -270,19 +423,102 @@
   /* ───────── כרטיס מוצר ───────── */
   function card(p) {
     const alt = p.model || p.images[1];
-    return `<article class="card">
-      <a class="card__media" href="product.html?id=${p.id}" aria-label="${esc(p.name)}">
-        ${p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ""}
-        ${imgTag(p.images[0], "main", p.name)}
-        ${alt ? imgTag(alt, "alt", "") : ""}
-      </a>
+    const out = p.inStock === false;
+    return `<article class="card${out ? " is-out" : ""}">
+      <div class="card__media">
+        <a class="card__link" href="product.html?id=${p.id}" aria-label="${esc(p.name)}">
+          ${imgTag(p.images[0], "main", p.name)}
+          ${alt ? imgTag(alt, "alt", "") : ""}
+        </a>
+        ${out ? `<span class="badge badge--out">אזל מהמלאי</span>` : p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ""}
+        ${wishBtn(p.id)}
+      </div>
       <a href="product.html?id=${p.id}"><h3 class="card__name">${esc(p.name)}</h3></a>
       <div class="price">${money(p.price)}${p.oldPrice ? `<del>${money(p.oldPrice)}</del>` : ""}</div>
     </article>`;
   }
 
   /* ───────── דף הבית ───────── */
+  function heroSlider() {
+    const slides = SITE.heroSlides || [];
+    const root = $("#hero");
+    root.innerHTML = `
+      <div class="slides">
+        ${slides.map((s, i) => `
+        <div class="slide hero__inner${i === 0 ? " active" : ""}" role="group" aria-roledescription="שקופית" aria-label="${i + 1} מתוך ${slides.length}" aria-hidden="${i !== 0}">
+          <div class="hero__text">
+            <span class="eyebrow">${esc(s.eyebrow || "")}</span>
+            <${i === 0 ? "h1" : "h2"} class="hero__title">${esc(s.title).replace(/\n/g, "<br>")}</${i === 0 ? "h1" : "h2"}>
+            <p>${esc(s.text || "")}</p>
+            <div class="hero__ctas">
+              ${s.cta ? `<a class="btn btn--primary" href="${s.cta.href}" tabindex="${i === 0 ? 0 : -1}">${esc(s.cta.label)}</a>` : ""}
+            </div>
+            <span class="script" lang="en">Shine Everyday</span>
+          </div>
+          <div class="hero__img"><img src="${IMG}${s.image}" alt="" ${i ? 'loading="lazy"' : ""}></div>
+        </div>`).join("")}
+      </div>
+      ${slides.length > 1 ? `
+      <button class="slider__arrow slider__prev" aria-label="הקודם">${ICONS.chevR}</button>
+      <button class="slider__arrow slider__next" aria-label="הבא">${ICONS.chevL}</button>
+      <div class="slider__dots">${slides.map((_, i) => `<button aria-label="שקופית ${i + 1}" aria-current="${i === 0}"></button>`).join("")}</div>` : ""}`;
+    if (slides.length < 2) return;
+
+    let cur = 0, timer;
+    const els = $$(".slide", root), dots = $$(".slider__dots button", root);
+    const go = (n) => {
+      cur = (n + els.length) % els.length;
+      els.forEach((el, i) => {
+        el.classList.toggle("active", i === cur); el.setAttribute("aria-hidden", i !== cur);
+        $$("a", el).forEach((a) => (a.tabIndex = i === cur ? 0 : -1));
+      });
+      dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
+    };
+    const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("a11y-still");
+    const play = () => { clearInterval(timer); if (!still()) timer = setInterval(() => go(cur + 1), 6000); };
+    const stop = () => clearInterval(timer);
+    $(".slider__next", root).addEventListener("click", () => { go(cur + 1); play(); });
+    $(".slider__prev", root).addEventListener("click", () => { go(cur - 1); play(); });
+    dots.forEach((d, i) => d.addEventListener("click", () => { go(i); play(); }));
+    root.addEventListener("mouseenter", stop); root.addEventListener("mouseleave", play);
+    root.addEventListener("focusin", stop); root.addEventListener("focusout", play);
+    // החלקה במובייל
+    let x0 = null;
+    root.addEventListener("pointerdown", (e) => (x0 = e.clientX));
+    root.addEventListener("pointerup", (e) => {
+      if (x0 === null) return;
+      const dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 50) { go(dx > 0 ? cur + 1 : cur - 1); play(); }
+    });
+    play();
+  }
+
   function home() {
+    heroSlider();
+
+    $("#faq-list").innerHTML = (SITE.faq || []).map((f, i) =>
+      `<details${i === 0 ? " open" : ""}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
+
+    $("#club-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const f = e.target, name = f.name.value.trim(), phone = f.phone.value.trim(), bday = f.bday.value;
+      const okName = name.length >= 2, okPhone = phone.replace(/\D/g, "").length >= 9;
+      f.name.closest(".field").classList.toggle("is-error", !okName);
+      f.phone.closest(".field").classList.toggle("is-error", !okPhone);
+      if (!okName || !okPhone) return;
+      const msg = ["היי Ellie Jewelry! 💗", "אשמח להצטרף למועדון הלקוחות.", "", `שם: ${name}`, `טלפון: ${phone}`, bday ? `תאריך לידה: ${bday.split("-").reverse().join("/")}` : null]
+        .filter((l) => l !== null).join("\n");
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+      toast("ההרשמה נפתחה בוואטסאפ – נשאר רק ללחוץ שליחה");
+    });
+
+    if (SITE.instagram) {
+      const pics = ["lotus-drop-model.webp", "pear-tennis-bust.webp", "lotus-peer-model.webp", "tennis-spikes-model.webp", "collier-square.webp", "helix-tennis.webp"];
+      $("#insta").hidden = false;
+      $("#insta-link").href = SITE.instagram;
+      $("#insta-grid").innerHTML = pics.map((f) => `<a href="${esc(SITE.instagram)}" target="_blank" rel="noopener" aria-label="לאינסטגרם שלנו">${imgTag(f)}<span>${ICONS.instagram}</span></a>`).join("");
+    }
+
     $("#featured").innerHTML = PRODUCTS.filter((p) => p.featured).slice(0, 8).map(card).join("");
     $("#earrings-row").innerHTML = PRODUCTS.filter((p) => p.category === "earrings").slice(0, 4).map(card).join("");
     $("#cats").innerHTML = Object.entries(CATEGORIES).map(([k, c]) => `
@@ -296,29 +532,54 @@
   function shop() {
     const params = new URLSearchParams(location.search);
     let cat = CATEGORIES[params.get("cat")] ? params.get("cat") : "all";
+    let sub = cat !== "all" && (CATEGORIES[cat].subs || {})[params.get("sub")] ? params.get("sub") : "all";
+    let q = (params.get("q") || "").trim();
     let sort = "default";
+    const syncUrl = () => {
+      const u = new URLSearchParams();
+      if (cat !== "all") u.set("cat", cat);
+      if (sub !== "all") u.set("sub", sub);
+      if (q) u.set("q", q);
+      history.replaceState(null, "", "shop.html" + (u.toString() ? "?" + u : ""));
+    };
+    const drawSubs = () => {
+      const box = $("#subs");
+      const subs = cat === "all" ? {} : CATEGORIES[cat].subs || {};
+      box.innerHTML = Object.keys(subs).length
+        ? [["all", "הכל"], ...Object.entries(subs)].map(([k, n]) => `<button class="chip" data-sub="${k}" aria-pressed="${k === sub}">${esc(n)}</button>`).join("")
+        : "";
+      $$("[data-sub]", box).forEach((b) => b.addEventListener("click", () => { sub = b.dataset.sub; syncUrl(); drawSubs(); draw(); }));
+    };
     const tabs = [["all", "הכל"], ...Object.entries(CATEGORIES).map(([k, c]) => [k, c.name])];
 
     $("#tabs").innerHTML = tabs.map(([k, n]) => `<button class="tab" data-cat="${k}" aria-pressed="${k === cat}">${n}</button>`).join("");
     $$("#tabs .tab").forEach((t) => t.addEventListener("click", () => {
-      cat = t.dataset.cat;
+      cat = t.dataset.cat; sub = "all";
       $$("#tabs .tab").forEach((x) => x.setAttribute("aria-pressed", x === t));
-      history.replaceState(null, "", cat === "all" ? "shop.html" : `shop.html?cat=${cat}`);
+      syncUrl();
       $$(".nav a").forEach((a) => a.removeAttribute("aria-current"));
-      draw();
+      drawSubs(); draw();
     }));
     $("#sort").addEventListener("change", (e) => { sort = e.target.value; draw(); });
 
     function draw() {
-      let list = PRODUCTS.filter((p) => cat === "all" || p.category === cat);
+      let list = q ? findProducts(q) : PRODUCTS;
+      list = list.filter((p) => (cat === "all" || p.category === cat) && (sub === "all" || p.sub === sub));
       if (sort === "low") list = [...list].sort((a, b) => a.price - b.price);
       if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
-      const title = cat === "all" ? "כל התכשיטים" : CATEGORIES[cat].name;
+      if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name, "he"));
+      const base = cat === "all" ? "כל התכשיטים" : sub !== "all" ? CATEGORIES[cat].subs[sub] : CATEGORIES[cat].name;
+      const title = q ? `תוצאות חיפוש: "${q}"` : base;
+      $("#search-note").hidden = !q;
+      $("#search-note").innerHTML = q ? `<button class="back-link" id="clear-q">ניקוי החיפוש</button>` : "";
+      if (q) $("#clear-q").addEventListener("click", () => { q = ""; syncUrl(); draw(); });
       $("#page-title").textContent = title;
       document.title = `${title} | Ellie Jewelry`;
       $("#count").textContent = `${list.length} פריטים`;
-      $("#shop-grid").innerHTML = list.map(card).join("");
+      $("#shop-grid").innerHTML = list.length ? list.map(card).join("")
+        : `<div class="empty" style="grid-column:1/-1"><p>לא נמצאו תכשיטים</p><a class="btn btn--outline" href="shop.html">לכל התכשיטים</a></div>`;
     }
+    drawSubs();
     draw();
   }
 
@@ -347,7 +608,8 @@
         </div>
         <div class="product__info">
           ${p.badge ? `<span class="eyebrow" style="font-size:14px;letter-spacing:.1em">${esc(p.badge)}</span>` : ""}
-          <h1>${esc(p.name)}</h1>
+          <div class="title-row"><h1>${esc(p.name)}</h1>${wishBtn(p.id, "wish-btn wish-btn--lg")}</div>
+          ${p.inStock === false ? `<span class="badge badge--out badge--inline">אזל מהמלאי</span>` : ""}
           <div class="price">${money(p.price)}${p.oldPrice ? `<del>${money(p.oldPrice)}</del>` : ""}</div>
           <p class="product__desc">${esc(p.description || "")}</p>
           ${(p.options || []).map((o, oi) => `
@@ -357,12 +619,27 @@
                 ${o.values.map((v) => `<button class="chip" role="radio" aria-checked="${sel[o.label] === v}" data-v="${esc(v)}">${TONE_COLORS[v] ? `<span class="swatch" style="background:${TONE_COLORS[v]}"></span>` : ""}${esc(v)}</button>`).join("")}
               </div>
             </fieldset>`).join("")}
+          ${p.inStock === false ? `
+          <form class="restock form" id="restock" novalidate>
+            <h3>אהבת את הפריט? נעדכן אותך ברגע שהוא חוזר!</h3>
+            <div class="field"><label for="r-name">שם מלא</label><input id="r-name" name="name" autocomplete="name"><span class="err">נא למלא שם</span></div>
+            <div class="field"><label for="r-phone">טלפון</label><input id="r-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"><span class="err">נא למלא מספר טלפון תקין</span></div>
+            <div class="field"><label for="r-notes">הערות (לא חובה)</label><textarea id="r-notes" name="notes"></textarea></div>
+            <button class="btn btn--wa btn--block" type="submit">${ICONS.wa} עדכנו אותי בוואטסאפ</button>
+          </form>` : `
           <div class="buy-row">
             <div class="qty" aria-label="כמות"><button id="q-plus" aria-label="הוספה">+</button><span id="q-val">1</span><button id="q-minus" aria-label="הפחתה">−</button></div>
             <button class="btn btn--primary" id="add">הוספה לסל</button>
-          </div>
+          </div>`}
           <a class="ask-link" target="_blank" rel="noopener" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`היי, יש לי שאלה על "${p.name}"`)}">${ICONS.wa} יש לך שאלה על התכשיט? דברי איתנו בוואטסאפ</a>
           <div class="accordion">
+            <details><summary>מידע נוסף</summary>
+              <dl class="specs">
+                <dt>קטגוריה</dt><dd>${cat.name}${(cat.subs || {})[p.sub] ? ` · ${cat.subs[p.sub]}` : ""}</dd>
+                ${(p.options || []).map((o) => `<dt>${esc(o.label)}</dt><dd>${o.values.map(esc).join(", ")}</dd>`).join("")}
+                <dt>זמינות</dt><dd>${p.inStock === false ? "אזל מהמלאי" : "במלאי"}</dd>
+              </dl>
+            </details>
             <details open><summary>איך מזמינים?</summary><p>מוסיפים לסל, ממלאים שם וטלפון ולוחצים "שליחת ההזמנה בוואטסאפ". ההזמנה מגיעה אלינו, ואנחנו חוזרות אלייך לאישור, לתשלום ולתיאום המשלוח.</p></details>
             <details><summary>משלוח ואיסוף</summary><p>אפשר לבחור משלוח עד הבית או איסוף עצמי. זמני המשלוח והעלות יתואמו איתך בוואטסאפ בעת אישור ההזמנה.</p></details>
             <details><summary>שמירה על התכשיט</summary><p>מומלץ להימנע ממגע עם בשמים, קרמים ומים, ולשמור את התכשיט בנפרד בקופסה או בשקית בד.</p></details>
@@ -405,6 +682,23 @@
       }));
     });
 
+    if (p.inStock === false) {
+      $("#restock").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const f = e.target, name = f.name.value.trim(), phone = f.phone.value.trim(), notes = f.notes.value.trim();
+        const okName = name.length >= 2, okPhone = phone.replace(/\D/g, "").length >= 9;
+        f.name.closest(".field").classList.toggle("is-error", !okName);
+        f.phone.closest(".field").classList.toggle("is-error", !okPhone);
+        if (!okName || !okPhone) return;
+        const chosen = optText(sel);
+        const msg = ["היי Ellie Jewelry!", `אשמח לעדכון כש"${p.name}" חוזר למלאי.`, chosen || null, "", `שם: ${name}`, `טלפון: ${phone}`, notes ? `הערות: ${notes}` : null]
+          .filter((l) => l !== null).join("\n");
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+        toast("הבקשה נפתחה בוואטסאפ – נשאר רק ללחוץ שליחה");
+      });
+      return;
+    }
+
     const qv = $("#q-val");
     $("#q-plus").addEventListener("click", () => { qty++; qv.textContent = qty; });
     $("#q-minus").addEventListener("click", () => { qty = Math.max(1, qty - 1); qv.textContent = qty; });
@@ -421,8 +715,17 @@
     });
   }
 
+  /* ───────── עמוד מועדפים ───────── */
+  function wishlistPage() {
+    const list = wish.map(byId).filter(Boolean);
+    $("#wish-count-note").textContent = list.length ? `${list.length} פריטים שמורים` : "";
+    $("#wish-grid").innerHTML = list.length ? list.map(card).join("")
+      : `<div class="empty" style="grid-column:1/-1"><p>עוד לא שמרת תכשיטים. לחצי על הלב ליד תכשיט כדי לשמור אותו כאן.</p><a class="btn btn--outline" href="shop.html">לכל התכשיטים</a></div>`;
+  }
+
   /* ───────── הפעלה ───────── */
   layout();
   renderCart();
-  ({ home, shop, product }[document.body.dataset.page] || (() => {}))();
+  ({ home, shop, product, wishlist: wishlistPage }[document.body.dataset.page] || (() => {}))();
+  syncWish();
 })();

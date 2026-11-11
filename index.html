@@ -17,20 +17,8 @@
 </head>
 <body data-page="home">
 <main id="main">
-  <section class="hero container">
-    <div class="hero__inner">
-      <div class="hero__text">
-        <span class="eyebrow">More than a jewel · a part of you</span>
-        <h1>תכשיטים שמספרים<br>את הסיפור שלך</h1>
-        <p>תכשיטי נשים אלגנטיים ומודרניים מרודיום, כסף וגולדפילד, לנשים שאוהבות סטייל, איכות וייופי שמרגיש אישי.</p>
-        <div class="hero__ctas">
-          <a class="btn btn--primary" href="shop.html">לכל התכשיטים</a>
-          <a class="btn btn--outline" href="shop.html?cat=necklaces">שרשראות</a>
-        </div>
-        <span class="script" lang="en">Shine Everyday</span>
-      </div>
-      <div class="hero__img"><img src="assets/img/products/pear-tennis-bust.webp" alt="שלוש שרשראות טניס עם אבן טיפה בזהב, כסף ורוז גולד"></div>
-    </div>
+  <section class="hero container" aria-roledescription="קרוסלה" aria-label="מבצעים וקולקציות">
+    <div class="slider" id="hero"></div>
   </section>
 
   <section class="section container">
@@ -73,7 +61,35 @@
     <div class="grid" id="earrings-row"></div>
     <div style="text-align:center;margin-top:34px"><a class="btn btn--outline" href="shop.html?cat=earrings">לכל העגילים</a></div>
   </section>
+
+  <section class="section container" id="faq">
+    <div class="section__head"><span class="ornament"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z M3 9h18 M10 4 8.5 9 12 20l3.5-11L14 4"/></svg></span><h2>שאלות נפוצות</h2></div>
+    <div class="faq" id="faq-list"></div>
+  </section>
+
+  <section class="container">
+    <div class="club">
+      <div>
+        <span class="slogan">Ellie Club</span>
+        <h2>הצטרפי למועדון של Ellie</h2>
+        <p>השאירי פרטים ותהיי הראשונה לשמוע על קולקציות חדשות, תכשיטים שחוזרים למלאי והפתעות מיוחדות.</p>
+      </div>
+      <form class="club__form form" id="club-form" novalidate>
+        <div class="field"><label for="c-name">שם מלא</label><input id="c-name" name="name" autocomplete="name"><span class="err">נא למלא שם</span></div>
+        <div class="field"><label for="c-phone">טלפון</label><input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"><span class="err">נא למלא מספר טלפון תקין</span></div>
+        <div class="field"><label for="c-bday">תאריך לידה (לא חובה)</label><input id="c-bday" name="bday" type="date"></div>
+        <button class="btn btn--primary btn--block" type="submit">הצטרפות למועדון</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="section container" id="insta" hidden>
+    <div class="section__head"><span class="ornament"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z M3 9h18 M10 4 8.5 9 12 20l3.5-11L14 4"/></svg></span><h2>עקבי אחרינו באינסטגרם</h2></div>
+    <div class="insta-grid" id="insta-grid"></div>
+    <div style="text-align:center;margin-top:28px"><a class="btn btn--outline" id="insta-link" target="_blank" rel="noopener">לעמוד האינסטגרם</a></div>
+  </section>
 </main>
+<script src="assets/js/site.js"></script>
 <script src="assets/js/products.js"></script>
 <script src="assets/js/app.js"></script>
 </body>

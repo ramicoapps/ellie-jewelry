@@ -5,6 +5,8 @@
     id        – מזהה באנגלית (בלי רווחים), משמש לכתובת העמוד
     name      – שם המוצר
     category  – "necklaces" (שרשראות) או "earrings" (עגילים)
+    sub       – תת-קטגוריה (הרשימה ב-CATEGORIES למטה), למשל "tennis"
+    inStock   – (לא חובה) false = "אזל מהמלאי", ומופיע טופס "עדכנו אותי כשחוזר"
     price     – מחיר בשקלים (מספר בלבד)
     oldPrice  – (לא חובה) מחיר לפני הנחה
     images    – תמונות מתוך assets/img/products. הראשונה היא הראשית
@@ -25,8 +27,14 @@
 const WHATSAPP_NUMBER = "972505899955";
 
 const CATEGORIES = {
-  necklaces: { name: "שרשראות", image: "tennis-spikes-model.webp" },
-  earrings:  { name: "עגילים",  image: "lotus-drop-model.webp" },
+  necklaces: {
+    name: "שרשראות", image: "tennis-spikes-model.webp",
+    subs: { tennis: "שרשראות טניס", collier: "קולייר טניס", rigid: "שרשראות קשיחות", delicate: "שרשראות עדינות" },
+  },
+  earrings: {
+    name: "עגילים", image: "lotus-drop-model.webp",
+    subs: { helix: "הליקס ללא חור", drop: "עגילים נופלים", double: "עגילי מחור לחור", hoops: "חישוקים", studs: "עגילים צמודים" },
+  },
 };
 
 const TONES_3 = ["זהב", "כסף", "רוז גולד"];
@@ -35,6 +43,7 @@ const PRODUCTS = [
   // ───────────── עגילים ─────────────
   {
     id: "helix-marquise",
+    sub: "helix",
     baseTone: "rose",
     name: "הליקס ללא חור – אבן מרקיזה",
     category: "earrings",
@@ -45,6 +54,7 @@ const PRODUCTS = [
   },
   {
     id: "helix-tennis",
+    sub: "helix",
     baseTone: "rose",
     name: "הליקס ללא חור – טניס קלאסי",
     category: "earrings",
@@ -57,6 +67,7 @@ const PRODUCTS = [
   },
   {
     id: "hoop-marquise",
+    sub: "hoops",
     baseTone: "silver",
     name: "עגיל חישוק – מסגרת מרקיזה נופלת",
     category: "earrings",
@@ -67,6 +78,7 @@ const PRODUCTS = [
   },
   {
     id: "lotus-peer",
+    sub: "double",
     baseTone: "rose",
     name: "עגיל מחור לחור – לוטוס פאר",
     category: "earrings",
@@ -80,6 +92,7 @@ const PRODUCTS = [
   },
   {
     id: "lotus-drop",
+    sub: "drop",
     baseTone: "gold",
     name: "עגיל נופל – לוטוס",
     category: "earrings",
@@ -92,6 +105,7 @@ const PRODUCTS = [
   },
   {
     id: "marquise-drop",
+    sub: "drop",
     baseTone: "silver",
     name: "עגיל נופל – מרקיזה",
     category: "earrings",
@@ -102,6 +116,7 @@ const PRODUCTS = [
   },
   {
     id: "rainbow-drops",
+    sub: "studs",
     baseTone: "silver",
     name: "עגיל קשת – שלוש טיפות",
     category: "earrings",
@@ -114,6 +129,7 @@ const PRODUCTS = [
   // ───────────── שרשראות ─────────────
   {
     id: "oval-classic",
+    sub: "delicate",
     toneImages: { "זהב": "oval-gold.webp", "כסף": "oval-silver.webp" },
     name: "שרשרת אובל קלאסית גדולה",
     category: "necklaces",
@@ -125,6 +141,7 @@ const PRODUCTS = [
   },
   {
     id: "thread-marquise",
+    sub: "delicate",
     toneImages: { "זהב": "thread-gold.webp", "ורוד": "thread-pink.webp", "שחור": "thread-black.webp" },
     name: "שרשרת חוט – תליון טיפה מרקיז",
     category: "necklaces",
@@ -135,6 +152,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-graduated",
+    sub: "tennis",
     baseTone: "rose",
     name: "שרשרת טניס 3 שיניים – דגרדה",
     category: "necklaces",
@@ -145,6 +163,7 @@ const PRODUCTS = [
   },
   {
     id: "pear-tennis",
+    sub: "tennis",
     name: "שרשרת טניס – אבן טיפה",
     category: "necklaces",
     price: 349,
@@ -156,6 +175,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-classic",
+    sub: "tennis",
     baseTone: "silver",
     name: "שרשרת טניס קלאסית",
     category: "necklaces",
@@ -169,6 +189,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-spikes",
+    sub: "tennis",
     baseTone: "rose",
     name: "שרשרת טניס שפיצים 3 מ״מ",
     category: "necklaces",
@@ -180,6 +201,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-square",
+    sub: "collier",
     baseTone: "rose",
     name: "קולייר טניס 3 מ״מ – חיתוך מרובע",
     category: "necklaces",
@@ -192,6 +214,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-marquise-center",
+    sub: "collier",
     baseTone: "rose",
     name: "קולייר טניס דגרדה – מרקיזה מרכזית",
     category: "necklaces",
@@ -203,6 +226,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-mini-ovals",
+    sub: "collier",
     baseTone: "rose",
     name: "קולייר טניס – מיני אובלים לרוחב",
     category: "necklaces",
@@ -213,6 +237,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-marquises",
+    sub: "collier",
     baseTone: "rose",
     name: "קולייר טניס – משובץ מרקיזות",
     category: "necklaces",
@@ -224,6 +249,7 @@ const PRODUCTS = [
   },
   {
     id: "rigid-rectangle",
+    sub: "rigid",
     baseTone: "rose",
     name: "שרשרת קשיחה – מסגרת מלבן",
     category: "necklaces",
@@ -234,6 +260,7 @@ const PRODUCTS = [
   },
   {
     id: "rigid-pear",
+    sub: "rigid",
     baseTone: "gold",
     name: "שרשרת קשיחה – תליון טיפה",
     category: "necklaces",
