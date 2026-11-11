@@ -642,3 +642,130 @@ html.a11y-still *, html.a11y-still *::before, html.a11y-still *::after { transit
 
 /* כשהתפריט פתוח – ההדר מעל שכבת ההחשכה */
 .header:has(.nav.open) { z-index: 75; }
+
+/* ═════════ עיצוב יוקרתי – סגנון מגזין ═════════
+   שכבה אחרונה שגוברת על הסגנונות שמעליה:
+   פינות ישרות, קווים דקים, כותרות דקות, הרבה אוויר */
+:root { --radius: 0; --max: 1320px; }
+
+body { letter-spacing: .01em; }
+.announce { font-size: 12px; letter-spacing: .14em; padding: 9px 16px; }
+.header__row { height: 84px; }
+.nav { gap: 34px; }
+.nav > a, .nav__item > a { font-size: 14px; letter-spacing: .06em; }
+.mega { border-radius: 0; }
+.logo img { width: 68px; height: 68px; }
+
+/* כפתורים: מלבן דק, אותיות מרווחות */
+.btn { border-radius: 0; padding: 14px 34px; font-size: 13px; font-weight: 400; letter-spacing: .18em; }
+.btn--primary { background: var(--charcoal); }
+.btn--primary:hover { background: var(--rose-deep); }
+.btn--outline { border: 1px solid var(--charcoal); color: var(--charcoal); }
+.btn--outline:hover { background: var(--charcoal); color: var(--ivory); }
+.btn--wa { border-radius: 0; }
+
+/* פתיחה: עמוד מגזין */
+.hero { padding: 0; width: 100%; max-width: none; margin: 0; }
+.hero__inner {
+  grid-template-columns: minmax(340px, 1fr) 1.55fr;
+  background: var(--ivory); border-radius: 0; min-height: 0;
+  height: min(76vh, 640px); border-bottom: 1px solid var(--line);
+}
+.hero__text {
+  padding: 0 clamp(28px, 5vw, 80px); gap: 0; justify-content: center;
+  border-inline-end: 1px solid var(--line);
+}
+.hero .eyebrow { font-size: 11px; letter-spacing: .38em; color: var(--rose-deep); margin-bottom: 22px; }
+.hero__title {
+  font-family: "Frank Ruhl Libre", serif; font-weight: 300;
+  font-size: clamp(32px, 3.3vw, 50px); line-height: 1.22; letter-spacing: -.005em; color: var(--charcoal);
+}
+.hero__rule { display: block; width: 44px; height: 1px; background: var(--rose); margin: 26px 0 22px; }
+.hero p { font-size: 15px; line-height: 1.85; color: var(--muted); max-width: 30ch; font-weight: 300; }
+.hero__ctas { margin-top: 30px; }
+.hero__img { overflow: hidden; }
+.slider__dots { display: none; }
+.slider__nav {
+  position: absolute; bottom: 30px; inset-inline-start: clamp(28px, 5vw, 80px); z-index: 2;
+  display: flex; align-items: center; gap: 14px;
+}
+.slider__arrow {
+  position: static; transform: none; width: 36px; height: 36px; border-radius: 0;
+  background: transparent; box-shadow: none; border: 1px solid var(--line); color: var(--charcoal);
+}
+.slider__arrow:hover { background: var(--charcoal); color: var(--ivory); border-color: var(--charcoal); }
+.slider__arrow svg { width: 16px; height: 16px; }
+.slider__count { font-family: var(--font-latin); font-size: 12px; letter-spacing: .2em; color: var(--taupe); min-width: 58px; text-align: center; direction: ltr; }
+
+/* כותרות סקשנים */
+.section { padding: 96px 0; }
+.section__head { margin-bottom: 48px; }
+.section__head h2 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: clamp(28px, 2.6vw, 38px); letter-spacing: .01em; margin-top: 10px; }
+.section__head .ornament::before, .section__head .ornament::after { width: 72px; opacity: .6; }
+.section__head .ornament svg { width: 18px; height: 18px; }
+
+/* קטגוריות: תמונות גבוהות, כיתוב עדין */
+.cats { gap: 24px; }
+.cat { border-radius: 0; aspect-ratio: 4 / 5; }
+.cat__label { padding: 80px 32px 30px; flex-direction: column; align-items: flex-start; gap: 6px; background: linear-gradient(to top, rgba(46,42,39,.45), transparent 70%); }
+.cat__label h3 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: 34px; }
+.cat__label span { font-size: 12px; letter-spacing: .2em; border-bottom-color: rgba(255,255,255,.6); }
+
+/* כרטיסי מוצר נקיים */
+.grid { gap: 48px 28px; }
+.card { gap: 8px; }
+.card__media { border-radius: 0; border: 0; background: #fff; margin-bottom: 8px; }
+.card__media img { transition: opacity .7s ease, transform 1.2s cubic-bezier(.22,1,.36,1); }
+.card__name { font-weight: 300; font-size: 15px; letter-spacing: .02em; }
+.card .price { font-weight: 400; font-size: 14px; color: var(--mocha); letter-spacing: .04em; }
+.badge { border-radius: 0; font-size: 11px; font-weight: 400; letter-spacing: .14em; padding: 4px 12px; top: 14px; inset-inline-start: 14px; background: rgba(255,255,255,.92); }
+.wish-btn { background: transparent; color: var(--charcoal); top: 8px; inset-inline-end: 8px; }
+.wish-btn:hover { transform: none; color: var(--rose-deep); }
+.wish-btn--lg { border-radius: 0; border-color: var(--line); background: transparent; }
+
+/* בלוקים: בלי צבעי רקע כבדים, רק קווים דקים */
+.brand { border-radius: 0; border: 1px solid var(--line); padding: 72px; }
+.brand h2, .club h2 { font-weight: 300; }
+.steps { border-radius: 0; background: transparent; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 56px 20px; }
+.step__num { border-color: var(--line); width: 60px; height: 60px; }
+.step h3 { font-weight: 400; font-size: 19px; }
+.club { border-radius: 0; background: var(--blush); padding: 64px 72px; }
+.field input, .field textarea, .select { border-radius: 0; }
+.faq summary { font-weight: 400; font-family: "Frank Ruhl Libre", serif; font-size: 19px; }
+.insta-grid a { border-radius: 0; }
+
+/* עמוד קטגוריה ומוצר */
+.page-head { padding: 64px 0 20px; }
+.page-head h1 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; }
+.tab, .chip { border-radius: 0; }
+.gallery__main, .gallery__thumbs button { border-radius: 0; }
+.gallery__main { border: 0; background: #fff; }
+.product__info h1 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; }
+.product__info .price { font-weight: 400; color: var(--mocha); font-size: 22px; }
+.qty, .remove { border-radius: 0; }
+.tone-note, .restock { border-radius: 0; }
+.drawer__head h2 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; }
+.cart-item__img, .search__img, .search__box { border-radius: 0; }
+
+/* כפתורים צפים קטנים ודיסקרטיים */
+.wa-float { width: 48px; height: 48px; box-shadow: 0 6px 18px rgba(37,211,102,.25); }
+.wa-float svg { width: 24px; height: 24px; }
+.a11y-btn { width: 40px; height: 40px; background: var(--charcoal); }
+.a11y-btn svg { width: 20px; height: 20px; }
+.a11y-panel, .a11y-panel button { border-radius: 0; }
+
+@media (max-width: 980px) {
+  .hero__inner { grid-template-columns: 1fr; height: auto; }
+  .hero__img { order: -1; aspect-ratio: 4 / 3.4; }
+  .hero__text { padding: 36px 24px 84px; border-inline-end: 0; }
+  .slider__nav { bottom: 26px; inset-inline-start: 24px; }
+}
+@media (max-width: 760px) {
+  .section { padding: 64px 0; }
+  .grid { gap: 32px 14px; }
+  .cat { aspect-ratio: 4 / 3.6; }
+  .brand, .club { padding: 40px 22px; }
+  .hero__title { font-size: 32px; }
+  .wa-float { width: 44px; height: 44px; }
+}
+.brand.pattern { background-image: none; background-color: transparent; }

@@ -449,18 +449,21 @@
           <div class="hero__text">
             <span class="eyebrow">${esc(s.eyebrow || "")}</span>
             <${i === 0 ? "h1" : "h2"} class="hero__title">${esc(s.title).replace(/\n/g, "<br>")}</${i === 0 ? "h1" : "h2"}>
+            <span class="hero__rule" aria-hidden="true"></span>
             <p>${esc(s.text || "")}</p>
             <div class="hero__ctas">
-              ${s.cta ? `<a class="btn btn--primary" href="${s.cta.href}" tabindex="${i === 0 ? 0 : -1}">${esc(s.cta.label)}</a>` : ""}
+              ${s.cta ? `<a class="btn btn--outline" href="${s.cta.href}" tabindex="${i === 0 ? 0 : -1}">${esc(s.cta.label)}</a>` : ""}
             </div>
-            <span class="script" lang="en">Shine Everyday</span>
           </div>
           <div class="hero__img"><img src="${IMG}${s.image}" alt="" ${i ? 'loading="lazy"' : ""}></div>
         </div>`).join("")}
       </div>
       ${slides.length > 1 ? `
-      <button class="slider__arrow slider__prev" aria-label="הקודם">${ICONS.chevR}</button>
-      <button class="slider__arrow slider__next" aria-label="הבא">${ICONS.chevL}</button>
+      <div class="slider__nav">
+        <button class="slider__arrow slider__prev" aria-label="הקודם">${ICONS.chevR}</button>
+        <span class="slider__count" aria-hidden="true">01 / ${String(slides.length).padStart(2, "0")}</span>
+        <button class="slider__arrow slider__next" aria-label="הבא">${ICONS.chevL}</button>
+      </div>
       <div class="slider__dots">${slides.map((_, i) => `<button aria-label="שקופית ${i + 1}" aria-current="${i === 0}"></button>`).join("")}</div>` : ""}`;
     if (slides.length < 2) return;
 
@@ -473,6 +476,8 @@
         $$("a", el).forEach((a) => (a.tabIndex = i === cur ? 0 : -1));
       });
       dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
+      const cnt = $(".slider__count", root);
+      if (cnt) cnt.textContent = `${String(cur + 1).padStart(2, "0")} / ${String(els.length).padStart(2, "0")}`;
     };
     const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("a11y-still");
     const play = () => { clearInterval(timer); if (!still()) timer = setInterval(() => go(cur + 1), 6000); };
