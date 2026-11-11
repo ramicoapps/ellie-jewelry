@@ -67,26 +67,18 @@
     <div class="faq" id="faq-list"></div>
   </section>
 
-  <section class="container">
-    <div class="club">
-      <div>
-        <span class="slogan">Ellie Club</span>
-        <h2>הצטרפי למועדון של Ellie</h2>
-        <p>השאירי פרטים ותהיי הראשונה לשמוע על קולקציות חדשות, תכשיטים שחוזרים למלאי והפתעות מיוחדות.</p>
-      </div>
-      <form class="club__form form" id="club-form" novalidate>
-        <div class="field"><label for="c-name">שם מלא</label><input id="c-name" name="name" autocomplete="name"><span class="err">נא למלא שם</span></div>
-        <div class="field"><label for="c-phone">טלפון</label><input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"><span class="err">נא למלא מספר טלפון תקין</span></div>
-        <div class="field"><label for="c-bday">תאריך לידה (לא חובה)</label><input id="c-bday" name="bday" type="date"></div>
-        <button class="btn btn--primary btn--block" type="submit">הצטרפות למועדון</button>
-      </form>
+  <section class="section container insta" id="insta" hidden>
+    <div class="insta__head">
+      <a class="insta__profile insta-link" target="_blank" rel="noopener">
+        <img id="insta-avatar" src="assets/img/logo.webp" alt="">
+        <span><strong id="insta-handle">Instagram</strong><small>Ellie Jewelry</small></span>
+      </a>
     </div>
-  </section>
-
-  <section class="section container" id="insta" hidden>
-    <div class="section__head"><span class="ornament"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z M3 9h18 M10 4 8.5 9 12 20l3.5-11L14 4"/></svg></span><h2>עקבי אחרינו באינסטגרם</h2></div>
     <div class="insta-grid" id="insta-grid"></div>
-    <div style="text-align:center;margin-top:28px"><a class="btn btn--outline" id="insta-link" target="_blank" rel="noopener">לעמוד האינסטגרם</a></div>
+    <div class="insta__actions">
+      <a class="btn btn--primary insta-link" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>עקבי אחרינו באינסטגרם</a>
+      <button class="btn btn--outline" id="insta-more" type="button" hidden>טען עוד</button>
+    </div>
   </section>
 </main>
 <script src="assets/js/site.js"></script>

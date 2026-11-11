@@ -784,3 +784,36 @@ body { letter-spacing: .01em; }
 .hero__img { padding: 16px; padding-inline-start: 0; }
 .hero__img img { border-radius: var(--img-radius); }
 @media (max-width: 980px) { .hero__img { padding: 12px 12px 0; } }
+
+/* ───────── פיד אינסטגרם ───────── */
+.insta__head { display: flex; justify-content: flex-start; margin-bottom: 28px; }
+.insta__profile { display: inline-flex; align-items: center; gap: 14px; }
+.insta__profile img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--ivory); border: 1px solid var(--line); }
+.insta__profile strong { display: block; font-family: var(--font-latin); font-weight: 400; font-size: 20px; color: var(--charcoal); direction: ltr; text-align: start; }
+.insta__profile small { display: block; font-size: 13px; color: var(--taupe); letter-spacing: .12em; }
+.insta__profile:hover strong { color: var(--rose-deep); }
+.insta-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.insta-post { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--img-radius); background: #fff; }
+.insta-post img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.22,1,.36,1); }
+.insta-post:hover img { transform: scale(1.06); }
+.insta-post__type { position: absolute; top: 10px; inset-inline-start: 10px; color: #fff; filter: drop-shadow(0 1px 3px rgba(0,0,0,.45)); display: grid; }
+.insta-post__type svg { width: 22px; height: 22px; }
+.insta-post__type--play { inset: 0; place-items: center; }
+.insta-post__type--play svg { width: 44px; height: 44px; }
+.insta-post__hover { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(46,42,39,.35); color: #fff; opacity: 0; transition: opacity .3s; }
+.insta-post__hover svg { width: 30px; height: 30px; }
+.insta-post:hover .insta-post__hover { opacity: 1; }
+.insta__actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.insta__actions .btn svg { width: 18px; height: 18px; }
+@media (max-width: 980px) { .insta-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 760px) { .insta-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; } .insta-post { border-radius: 8px; } .insta__profile img { width: 52px; height: 52px; } }
+
+/* אייקון אינסטגרם בתפריט הניווט */
+.nav__insta { display: inline-flex; align-items: center; gap: 10px; color: var(--charcoal); }
+.nav__insta svg { width: 20px; height: 20px; }
+.nav__insta span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.nav__insta:hover { color: var(--rose-deep); }
+@media (max-width: 1080px) {
+  .nav__insta { display: flex; font-size: 19px; padding: 14px 0; }
+  .nav__insta span { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+}

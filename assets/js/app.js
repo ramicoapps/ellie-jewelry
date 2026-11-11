@@ -131,11 +131,12 @@
               </div>`).join("")}
               <a href="shop.html"${page === "shop" && !cat ? ' aria-current="page"' : ""}>כל התכשיטים</a>
               <a href="index.html#faq">שאלות נפוצות</a>
+              ${SITE.instagram ? `<a class="nav__insta" href="${esc(SITE.instagram)}" target="_blank" rel="noopener" aria-label="אינסטגרם">${ICONS.instagram}<span>אינסטגרם</span></a>` : ""}
             </nav>
           </div>
           <a class="logo" href="index.html" aria-label="Ellie Jewelry – לדף הבית"><img src="assets/img/logo.webp" alt="Ellie Jewelry"></a>
           <div class="header__actions">
-            ${socials}
+            ${socials.replace(/<a [^>]*aria-label="אינסטגרם"[^>]*>.*?<\/a>/, "")}
             <a class="icon-btn social" href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener" aria-label="וואטסאפ">${ICONS.wa}</a>
             <button class="icon-btn" id="search-btn" aria-label="חיפוש">${ICONS.search}</button>
             <a class="icon-btn" href="wishlist.html" aria-label="המועדפים שלי">${ICONS.heart}<span class="cart-count wish-count"></span></a>
@@ -498,31 +499,62 @@
     play();
   }
 
+  /* ───────── פיד אינסטגרם ─────────
+     אם SITE.instagramFeed מוגדר (כתובת JSON מ-behold.so) – מוצגים הפוסטים האמיתיים.
+     אחרת מוצגות תמונות מהאתר, וכולן מקשרות לעמוד האינסטגרם. */
+  async function instagramFeed() {
+    const box = $("#insta"), grid = $("#insta-grid"), more = $("#insta-more");
+    const url = SITE.instagram, PAGE = 12;
+    box.hidden = false;
+    $$(".insta-link", box).forEach((a) => (a.href = url));
+    $("#insta-handle").textContent = SITE.instagramHandle ? "@" + SITE.instagramHandle : "Instagram";
+
+    const PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
+    const ALBUM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7.5" y="7.5" width="12" height="12" rx="2"/><path d="M4.5 15.5v-9a2 2 0 0 1 2-2h9"/></svg>';
+    let posts = [];
+    if (SITE.instagramFeed) {
+      try {
+        const data = await (await fetch(SITE.instagramFeed)).json();
+        const list = Array.isArray(data) ? data : data.posts || [];
+        posts = list.map((p) => ({
+          href: p.permalink || url,
+          img: (p.sizes && p.sizes.medium && p.sizes.medium.mediaUrl) || p.thumbnailUrl || p.mediaUrl,
+          type: p.mediaType || "IMAGE",
+          alt: (p.prunedCaption || p.caption || "").slice(0, 120),
+        })).filter((p) => p.img);
+        if (data.profilePictureUrl) $("#insta-avatar").src = data.profilePictureUrl;
+      } catch (e) { posts = []; }
+    }
+    if (!posts.length) {
+      posts = ["lotus-drop-model.webp", "tennis-spikes-model.webp", "pear-tennis-bust.webp", "lotus-peer-model.webp",
+        "collier-square.webp", "helix-tennis.webp", "oval-gold.webp", "lotus-peer.webp", "collier-marquises.webp",
+        "rigid-pear.webp", "helix-marquise.webp", "tennis-graduated.webp"]
+        .map((f) => ({ href: url, img: IMG + f, type: "IMAGE", alt: "" }));
+    }
+
+    let shown = 0;
+    const draw = () => {
+      const next = posts.slice(shown, shown + PAGE);
+      grid.insertAdjacentHTML("beforeend", next.map((p) => `
+        <a class="insta-post" href="${esc(p.href)}" target="_blank" rel="noopener" aria-label="${esc(p.alt || "פוסט באינסטגרם")}">
+          <img src="${esc(p.img)}" alt="" loading="lazy">
+          ${p.type === "VIDEO" ? `<i class="insta-post__type insta-post__type--play">${PLAY}</i>` : p.type === "CAROUSEL_ALBUM" ? `<i class="insta-post__type">${ALBUM}</i>` : ""}
+          <span class="insta-post__hover">${ICONS.instagram}</span>
+        </a>`).join(""));
+      shown += next.length;
+      more.hidden = shown >= posts.length;
+    };
+    more.addEventListener("click", draw);
+    draw();
+  }
+
   function home() {
     heroSlider();
 
     $("#faq-list").innerHTML = (SITE.faq || []).map((f, i) =>
       `<details${i === 0 ? " open" : ""}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
 
-    $("#club-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const f = e.target, name = f.name.value.trim(), phone = f.phone.value.trim(), bday = f.bday.value;
-      const okName = name.length >= 2, okPhone = phone.replace(/\D/g, "").length >= 9;
-      f.name.closest(".field").classList.toggle("is-error", !okName);
-      f.phone.closest(".field").classList.toggle("is-error", !okPhone);
-      if (!okName || !okPhone) return;
-      const msg = ["היי Ellie Jewelry! 💗", "אשמח להצטרף למועדון הלקוחות.", "", `שם: ${name}`, `טלפון: ${phone}`, bday ? `תאריך לידה: ${bday.split("-").reverse().join("/")}` : null]
-        .filter((l) => l !== null).join("\n");
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
-      toast("ההרשמה נפתחה בוואטסאפ – נשאר רק ללחוץ שליחה");
-    });
-
-    if (SITE.instagram) {
-      const pics = ["lotus-drop-model.webp", "pear-tennis-bust.webp", "lotus-peer-model.webp", "tennis-spikes-model.webp", "collier-square.webp", "helix-tennis.webp"];
-      $("#insta").hidden = false;
-      $("#insta-link").href = SITE.instagram;
-      $("#insta-grid").innerHTML = pics.map((f) => `<a href="${esc(SITE.instagram)}" target="_blank" rel="noopener" aria-label="לאינסטגרם שלנו">${imgTag(f)}<span>${ICONS.instagram}</span></a>`).join("");
-    }
+    if (SITE.instagram) instagramFeed();
 
     $("#featured").innerHTML = PRODUCTS.filter((p) => p.featured).slice(0, 8).map(card).join("");
     $("#earrings-row").innerHTML = PRODUCTS.filter((p) => p.category === "earrings").slice(0, 4).map(card).join("");

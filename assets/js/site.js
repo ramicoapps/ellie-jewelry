@@ -7,7 +7,10 @@
 
 const SITE = {
   // קישורים לרשתות חברתיות. כתובת ריקה ("") = האייקון והאזור לא יוצגו
-  instagram: "",
+  instagram: "https://www.instagram.com/ellie_jewelry770/",
+  instagramHandle: "ellie_jewelry770",
+  // פיד אמיתי של הפוסטים: כתובת JSON מ-behold.so (חינם). ריק = מוצגות תמונות מהאתר
+  instagramFeed: "",
   facebook: "",
   tiktok: "",
 
