@@ -1,5 +1,6 @@
 # Copies the original photos into assets/img with short English names,
-# resized to web size. Originals in images/ stay untouched.
+# resized to web size only - colors and backgrounds are kept exactly as sent.
+# Originals in images/ stay untouched.
 import os, sys
 from PIL import Image
 
@@ -18,15 +19,10 @@ names = [
  "collier-marquise-center", "collier-mini-ovals", "collier-marquises",
  "rigid-rectangle", "rigid-pear",
 ]
-# Product shots whose background is slightly off-white
-WHITEN = {"collier-marquise-center", "tennis-classic", "thread-gold", "thread-marquise"}
 assert len(files) == len(names), (len(files), len(names))
 for f, n in zip(files, names):
     im = Image.open(os.path.join(SRC, f)).convert("RGB")
     size = 1800 if n == "pear-tennis-bust" else 1100
-    if n in WHITEN:
-        # רקע אפרפר/ורדרד -> לבן, כדי שייבלע ברקע השמנת באתר
-        im = im.point(lambda v: min(255, int(v * 255 / 236)))
     im.thumbnail((size, size), Image.LANCZOS)
     im.save(os.path.join(OUT, n + ".webp"), "WEBP", quality=84)
     print(n, im.size)

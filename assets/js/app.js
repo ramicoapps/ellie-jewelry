@@ -9,6 +9,14 @@
     "ורוד": "#f0c9cf", "שחור": "#2b2b2b",
   };
 
+  const TONE_NAMES = { gold: "זהב", silver: "כסף", rose: "רוז גולד" };
+  const toneOf = (v) => (/רוז/.test(v) ? "rose" : /זהב/.test(v) ? "gold" : /כסף|רודיום/.test(v) ? "silver" : null);
+  // תמונה אמיתית של הגוון שנבחר, אם קיימת
+  const toneImage = (p, opts) => {
+    if (!p.toneImages) return null;
+    const v = Object.values(opts || {}).find((x) => p.toneImages[x]);
+    return v ? p.toneImages[v] : null;
+  };
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -17,6 +25,7 @@
   const imgTag = (file, cls = "", alt = "") =>
     `<img src="${IMG}${file}" alt="${esc(alt)}" loading="lazy" class="${cls}${PHOTOS.has(file) ? " is-photo" : ""}">`;
 
+  const DIAMOND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z M3 9h18 M10 4 8.5 9 12 20l3.5-11L14 4"/></svg>';
   const ICONS = {
     bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
     menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
@@ -50,7 +59,7 @@
 
     document.body.insertAdjacentHTML("afterbegin", `
       <a class="skip-link" href="#main">דלג לתוכן</a>
-      <div class="announce">בוחרים תכשיט ✦ שולחים הזמנה בוואטסאפ ✦ אנחנו חוזרות אלייך לאישור</div>
+      <div class="announce">תכשיטים שמספרים את הסיפור שלך ✦ הזמנה קלה בוואטסאפ</div>
       <header class="header">
         <div class="container header__row">
           <div style="display:flex;align-items:center;gap:8px">
@@ -74,7 +83,7 @@
         <div class="container footer__grid">
           <div class="footer__brand">
             <img src="assets/img/logo.webp" alt="" loading="lazy">
-            <p>Ellie Jewelry – תכשיטים עדינים ונוצצים לכל יום ולכל רגע מיוחד. בוחרים באתר, שולחים בוואטסאפ, ואנחנו דואגות לכל השאר.</p>
+            <p>אלי תכשיטים – מותג תכשיטים נשי, אלגנטי ומודרני. תכשיטים מרודיום, כסף וגולדפילד שמשלבים עיצוב על-זמני עם איכות יומיומית.</p>
           </div>
           <div>
             <h4>קטגוריות</h4>
@@ -93,6 +102,11 @@
           </div>
         </div>
         <div class="container footer__bottom">© ${new Date().getFullYear()} Ellie Jewelry. כל הזכויות שמורות.</div>
+        <div class="footer__band">
+          <span class="script" lang="en">Shine Everyday</span>
+          <span class="slogan">More than a jewel · a part of you</span>
+          <span class="tagline">תכשיטים שמספרים את הסיפור שלך</span>
+        </div>
       </footer>
       <a class="wa-float" href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener" aria-label="שיחה בוואטסאפ">${ICONS.wa}</a>
       <div class="overlay" id="overlay"></div>
@@ -155,7 +169,7 @@
     body.innerHTML = cart.map((it, i) => {
       const p = byId(it.id);
       return `<div class="cart-item">
-        <a class="cart-item__img" href="product.html?id=${p.id}">${imgTag(p.images[0], "", p.name)}</a>
+        <a class="cart-item__img" href="product.html?id=${p.id}">${imgTag(toneImage(p, it.opts) || p.images[0], "", p.name)}</a>
         <div>
           <h4>${esc(p.name)}</h4>
           <div class="meta">${esc(optText(it.opts))}</div>
@@ -317,7 +331,7 @@
       return;
     }
     document.title = `${p.name} | Ellie Jewelry`;
-    const imgs = [...p.images, ...(p.model ? [p.model] : [])];
+    const imgs = [...new Set([...p.images, ...Object.values(p.toneImages || {}), ...(p.model ? [p.model] : [])])];
     const cat = CATEGORIES[p.category];
     const sel = {};
     (p.options || []).forEach((o) => { if (o.values.length === 1) sel[o.label] = o.values[0]; });
@@ -328,6 +342,7 @@
       <div class="container product">
         <div class="gallery">
           <div class="gallery__main">${imgTag(imgs[0], "", p.name).replace(' loading="lazy"', "")}</div>
+          <p class="tone-note" id="tone-note" hidden></p>
           ${imgs.length > 1 ? `<div class="gallery__thumbs">${imgs.map((f, i) => `<button data-i="${i}" aria-current="${i === 0}" aria-label="תמונה ${i + 1}">${imgTag(f)}</button>`).join("")}</div>` : ""}
         </div>
         <div class="product__info">
@@ -355,15 +370,29 @@
         </div>
       </div>
       <section class="section container">
-        <div class="section__head"><span class="ornament">✦</span><h2>אולי תאהבי גם</h2></div>
+        <div class="section__head"><span class="ornament">${DIAMOND}</span><h2>אולי תאהבי גם</h2></div>
         <div class="grid">${PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4).map(card).join("")}</div>
       </section>`;
 
     const main = $(".gallery__main");
-    $$(".gallery__thumbs button").forEach((b) => b.addEventListener("click", () => {
-      main.innerHTML = imgTag(imgs[+b.dataset.i], "", p.name);
-      $$(".gallery__thumbs button").forEach((x) => x.setAttribute("aria-current", x === b));
-    }));
+    const showImage = (i) => {
+      main.innerHTML = imgTag(imgs[i], "", p.name);
+      $$(".gallery__thumbs button").forEach((x) => x.setAttribute("aria-current", +x.dataset.i === i));
+    };
+    $$(".gallery__thumbs button").forEach((b) => b.addEventListener("click", () => showImage(+b.dataset.i)));
+
+    // בחירת גוון: מעבר לתמונה של הגוון אם יש, ואחרת הערה איזה גוון מופיע בתמונה
+    const note = $("#tone-note");
+    const onTone = (v) => {
+      const file = p.toneImages && p.toneImages[v];
+      if (file) { showImage(imgs.indexOf(file)); note.hidden = true; return; }
+      const want = toneOf(v);
+      if (p.baseTone && want && want !== p.baseTone) {
+        showImage(0);
+        note.textContent = `בתמונה: גוון ${TONE_NAMES[p.baseTone]}. התכשיט יישלח בגוון שבחרת – ${v}.`;
+        note.hidden = false;
+      } else note.hidden = true;
+    };
 
     $$(".opt").forEach((fs) => {
       const o = p.options[+fs.dataset.opt];
@@ -372,6 +401,7 @@
         $$(".chip", fs).forEach((x) => x.setAttribute("aria-checked", x === ch));
         $(".chosen", fs).textContent = ch.dataset.v;
         fs.classList.remove("is-error");
+        onTone(ch.dataset.v);
       }));
     });
 

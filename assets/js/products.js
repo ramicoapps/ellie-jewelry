@@ -12,6 +12,11 @@
     options   – אפשרויות בחירה, למשל גוון או עובי
     badge     – (לא חובה) תגית קטנה, למשל "חדש" או "רב מכר"
     featured  – true = מופיע ברשימת "האהובים שלנו" בדף הבית
+    baseTone  – הגוון שמופיע בתמונה: "gold" / "silver" / "rose".
+                כשבוחרים גוון אחר, האתר צובע את התמונה (הדמיה)
+    toneImages – (לא חובה) תמונה אמיתית לכל גוון, למשל:
+                { "זהב": "x-gold.webp", "כסף": "x-silver.webp" }
+                כשיש תמונה אמיתית – היא מוצגת במקום ההדמיה
     description – תיאור קצר
 
   ⚠️ המחירים כרגע זמניים – יש להחליף במחירים האמיתיים.
@@ -30,6 +35,7 @@ const PRODUCTS = [
   // ───────────── עגילים ─────────────
   {
     id: "helix-marquise",
+    baseTone: "rose",
     name: "הליקס ללא חור – אבן מרקיזה",
     category: "earrings",
     price: 149,
@@ -39,6 +45,7 @@ const PRODUCTS = [
   },
   {
     id: "helix-tennis",
+    baseTone: "rose",
     name: "הליקס ללא חור – טניס קלאסי",
     category: "earrings",
     price: 139,
@@ -50,6 +57,7 @@ const PRODUCTS = [
   },
   {
     id: "hoop-marquise",
+    baseTone: "silver",
     name: "עגיל חישוק – מסגרת מרקיזה נופלת",
     category: "earrings",
     price: 179,
@@ -59,6 +67,7 @@ const PRODUCTS = [
   },
   {
     id: "lotus-peer",
+    baseTone: "rose",
     name: "עגיל מחור לחור – לוטוס פאר",
     category: "earrings",
     price: 199,
@@ -71,6 +80,7 @@ const PRODUCTS = [
   },
   {
     id: "lotus-drop",
+    baseTone: "gold",
     name: "עגיל נופל – לוטוס",
     category: "earrings",
     price: 169,
@@ -82,6 +92,7 @@ const PRODUCTS = [
   },
   {
     id: "marquise-drop",
+    baseTone: "silver",
     name: "עגיל נופל – מרקיזה",
     category: "earrings",
     price: 159,
@@ -91,6 +102,7 @@ const PRODUCTS = [
   },
   {
     id: "rainbow-drops",
+    baseTone: "silver",
     name: "עגיל קשת – שלוש טיפות",
     category: "earrings",
     price: 149,
@@ -102,6 +114,7 @@ const PRODUCTS = [
   // ───────────── שרשראות ─────────────
   {
     id: "oval-classic",
+    toneImages: { "זהב": "oval-gold.webp", "כסף": "oval-silver.webp" },
     name: "שרשרת אובל קלאסית גדולה",
     category: "necklaces",
     price: 229,
@@ -112,6 +125,7 @@ const PRODUCTS = [
   },
   {
     id: "thread-marquise",
+    toneImages: { "זהב": "thread-gold.webp", "ורוד": "thread-pink.webp", "שחור": "thread-black.webp" },
     name: "שרשרת חוט – תליון טיפה מרקיז",
     category: "necklaces",
     price: 189,
@@ -121,6 +135,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-graduated",
+    baseTone: "rose",
     name: "שרשרת טניס 3 שיניים – דגרדה",
     category: "necklaces",
     price: 389,
@@ -141,6 +156,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-classic",
+    baseTone: "silver",
     name: "שרשרת טניס קלאסית",
     category: "necklaces",
     price: 299,
@@ -153,6 +169,7 @@ const PRODUCTS = [
   },
   {
     id: "tennis-spikes",
+    baseTone: "rose",
     name: "שרשרת טניס שפיצים 3 מ״מ",
     category: "necklaces",
     price: 329,
@@ -163,6 +180,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-square",
+    baseTone: "rose",
     name: "קולייר טניס 3 מ״מ – חיתוך מרובע",
     category: "necklaces",
     price: 359,
@@ -174,6 +192,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-marquise-center",
+    baseTone: "rose",
     name: "קולייר טניס דגרדה – מרקיזה מרכזית",
     category: "necklaces",
     price: 419,
@@ -184,6 +203,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-mini-ovals",
+    baseTone: "rose",
     name: "קולייר טניס – מיני אובלים לרוחב",
     category: "necklaces",
     price: 389,
@@ -193,6 +213,7 @@ const PRODUCTS = [
   },
   {
     id: "collier-marquises",
+    baseTone: "rose",
     name: "קולייר טניס – משובץ מרקיזות",
     category: "necklaces",
     price: 399,
@@ -203,6 +224,7 @@ const PRODUCTS = [
   },
   {
     id: "rigid-rectangle",
+    baseTone: "rose",
     name: "שרשרת קשיחה – מסגרת מלבן",
     category: "necklaces",
     price: 219,
@@ -212,6 +234,7 @@ const PRODUCTS = [
   },
   {
     id: "rigid-pear",
+    baseTone: "gold",
     name: "שרשרת קשיחה – תליון טיפה",
     category: "necklaces",
     price: 219,
