@@ -776,3 +776,11 @@ body { letter-spacing: .01em; }
 .cat__label { padding: 60px 24px 22px; }
 .cat__label h3 { font-size: 28px; }
 @media (max-width: 760px) { .cats { grid-template-columns: 1fr 1fr; gap: 12px; } .cat { aspect-ratio: 3 / 4; } .cat__label { padding: 40px 14px 14px; } .cat__label h3 { font-size: 22px; } }
+
+/* פינות מעוגלות לכל התמונות */
+:root { --img-radius: 14px; }
+.card__media, .cat, .gallery__main, .insta-grid a { border-radius: var(--img-radius); }
+.gallery__thumbs button, .cart-item__img, .search__img { border-radius: 8px; }
+.hero__img { padding: 16px; padding-inline-start: 0; }
+.hero__img img { border-radius: var(--img-radius); }
+@media (max-width: 980px) { .hero__img { padding: 12px 12px 0; } }
