@@ -868,3 +868,6 @@ body { letter-spacing: .01em; }
     background-image: linear-gradient(180deg, rgba(46,42,39,0) 0, rgba(46,42,39,.25) 120px, rgba(46,42,39,.9) 250px, #2e2a27 300px), url("../img/products/lotus-peer-model.webp");
   }
 }
+
+/* אינסטגרם יושב ליד הוואטסאפ בהדר; בתפריט הניווט מופיע רק במובייל */
+@media (min-width: 1081px) { .nav__insta { display: none; } }

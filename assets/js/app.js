@@ -136,7 +136,7 @@
           </div>
           <a class="logo" href="index.html" aria-label="Ellie Jewelry – לדף הבית"><img src="assets/img/logo.webp" alt="Ellie Jewelry"></a>
           <div class="header__actions">
-            ${socials.replace(/<a [^>]*aria-label="אינסטגרם"[^>]*>.*?<\/a>/, "")}
+            ${socials}
             <a class="icon-btn social" href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener" aria-label="וואטסאפ">${ICONS.wa}</a>
             <button class="icon-btn" id="search-btn" aria-label="חיפוש">${ICONS.search}</button>
             <a class="icon-btn" href="wishlist.html" aria-label="המועדפים שלי">${ICONS.heart}<span class="cart-count wish-count"></span></a>
