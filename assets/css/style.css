@@ -769,3 +769,10 @@ body { letter-spacing: .01em; }
   .wa-float { width: 44px; height: 44px; }
 }
 .brand.pattern { background-image: none; background-color: transparent; }
+
+/* הקולקציות שלנו – כרטיסיות קטנות יותר */
+.cats { max-width: 860px; margin-inline: auto; gap: 20px; }
+.cat { aspect-ratio: 1; }
+.cat__label { padding: 60px 24px 22px; }
+.cat__label h3 { font-size: 28px; }
+@media (max-width: 760px) { .cats { grid-template-columns: 1fr 1fr; gap: 12px; } .cat { aspect-ratio: 3 / 4; } .cat__label { padding: 40px 14px 14px; } .cat__label h3 { font-size: 22px; } }
