@@ -456,7 +456,7 @@
               ${s.cta ? `<a class="btn btn--outline" href="${s.cta.href}" tabindex="${i === 0 ? 0 : -1}">${esc(s.cta.label)}</a>` : ""}
             </div>
           </div>
-          <div class="hero__img"><img src="${IMG}${s.image}" alt="" ${i ? 'loading="lazy"' : ""}></div>
+          <div class="hero__img"><img src="${s.image.includes("/") ? s.image : IMG + s.image}" alt="" ${i ? 'loading="lazy"' : ""}></div>
         </div>`).join("")}
       </div>
       ${slides.length > 1 ? `
@@ -548,6 +548,41 @@
     draw();
   }
 
+  /* ───────── שופינג מהתמונה ───────── */
+  function shopTheLook() {
+    const box = $("#look"), cfg = SITE.shopTheLook;
+    if (!box || !cfg) return;
+    const items = cfg.items.map((it) => ({ ...it, p: byId(it.id) })).filter((it) => it.p);
+    const total = items.reduce((s, it) => s + it.p.price, 0);
+    $("#look-media").innerHTML = `
+      <img src="${esc(cfg.image)}" alt="דוגמנית עונדת סט תכשיטים ברוז גולד" loading="lazy">
+      ${items.map((it, i) => `
+        <button class="look__dot" style="left:${it.x}%;top:${it.y}%" data-look="${i}" aria-label="${esc(it.p.name)}" aria-expanded="false">
+          <span class="look__tip"><strong>${esc(it.p.name)}</strong><em>${money(it.p.price)}</em></span>
+        </button>`).join("")}`;
+    $("#look-list").innerHTML = items.map((it, i) => `
+      <a class="look__item" href="product.html?id=${it.p.id}" data-look-item="${i}">
+        <span class="look__thumb">${imgTag(it.p.images[0], "", "")}</span>
+        <span class="look__info"><span class="look__name">${esc(it.p.name)}</span><span class="price">${money(it.p.price)}</span></span>
+        <span class="look__go" aria-hidden="true">${ICONS.chevL}</span>
+      </a>`).join("") + `<div class="look__total"><span>כל הסט</span><strong>${money(total)}</strong></div>`;
+
+    const dots = $$(".look__dot", box), rows = $$(".look__item", box);
+    const mark = (i) => { rows.forEach((r, k) => r.classList.toggle("is-hl", k === i)); dots.forEach((d, k) => d.classList.toggle("is-hl", k === i)); };
+    dots.forEach((d, i) => {
+      d.addEventListener("mouseenter", () => mark(i));
+      d.addEventListener("focus", () => mark(i));
+      d.addEventListener("click", () => {
+        const open = d.getAttribute("aria-expanded") !== "true";
+        dots.forEach((x) => x.setAttribute("aria-expanded", "false"));
+        d.setAttribute("aria-expanded", open); mark(open ? i : -1);
+        if (!open) location.href = rows[i].href;
+      });
+    });
+    rows.forEach((r, i) => r.addEventListener("mouseenter", () => mark(i)));
+    box.addEventListener("mouseleave", () => mark(-1));
+  }
+
   function home() {
     heroSlider();
 
@@ -555,6 +590,10 @@
       `<details${i === 0 ? " open" : ""}><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join("");
 
     if (SITE.instagram) instagramFeed();
+    shopTheLook();
+
+    const gift = $("#gift-wa");
+    if (gift) gift.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("היי Ellie Jewelry! 🎁\nאני מחפשת מתנה ואשמח לעזרה בבחירה.")}`;
 
     $("#featured").innerHTML = PRODUCTS.filter((p) => p.featured).slice(0, 8).map(card).join("");
     $("#earrings-row").innerHTML = PRODUCTS.filter((p) => p.category === "earrings").slice(0, 4).map(card).join("");
@@ -683,6 +722,18 @@
           </div>
         </div>
       </div>
+      ${p.wear ? `
+      <section class="container">
+        <div class="wear">
+          <div class="wear__img"><img src="assets/img/lifestyle/${esc(p.wear.image)}" alt="${esc(p.name)} על הגוף" loading="lazy"></div>
+          <div class="wear__text">
+            <span class="slogan">How to wear it</span>
+            <h2>איך לענוד</h2>
+            <p>${esc(p.wear.tip)}</p>
+            <span class="script" lang="en">Shine Everyday</span>
+          </div>
+        </div>
+      </section>` : ""}
       <section class="section container">
         <div class="section__head"><span class="ornament">${DIAMOND}</span><h2>אולי תאהבי גם</h2></div>
         <div class="grid">${PRODUCTS.filter((x) => x.category === p.category && x.id !== p.id).slice(0, 4).map(card).join("")}</div>

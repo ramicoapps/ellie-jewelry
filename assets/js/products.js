@@ -6,6 +6,7 @@
     name      – שם המוצר
     category  – "necklaces" (שרשראות) או "earrings" (עגילים)
     sub       – תת-קטגוריה (הרשימה ב-CATEGORIES למטה), למשל "tennis"
+    wear      – (לא חובה) תמונת "איך לענוד" מ-assets/img/lifestyle וטיפ קצר
     inStock   – (לא חובה) false = "אזל מהמלאי", ומופיע טופס "עדכנו אותי כשחוזר"
     price     – מחיר בשקלים (מספר בלבד)
     oldPrice  – (לא חובה) מחיר לפני הנחה
@@ -129,6 +130,7 @@ const PRODUCTS = [
   // ───────────── שרשראות ─────────────
   {
     id: "oval-classic",
+    wear: { image: "wear-oval.webp", tip: "תכשיט שמתאים לכל יום: שלבי עם סוודר בגזרת V או חולצה מכופתרת פתוחה, ותני לאבן להיות במרכז." },
     sub: "delicate",
     toneImages: { "זהב": "oval-gold.webp", "כסף": "oval-silver.webp" },
     name: "שרשרת אובל קלאסית גדולה",

@@ -871,3 +871,97 @@ body { letter-spacing: .01em; }
 
 /* אינסטגרם יושב ליד הוואטסאפ בהדר; בתפריט הניווט מופיע רק במובייל */
 @media (min-width: 1081px) { .nav__insta { display: none; } }
+
+/* ═════════ אזורי תמונה חדשים ═════════ */
+.btn--light { border: 1px solid rgba(255,249,246,.8); color: var(--ivory); background: transparent; }
+.btn--light:hover, .feature:hover .btn--light { background: var(--ivory); color: var(--charcoal); }
+
+/* באנר קולקציית הטניס: התמונה משמאל, הטקסט על הרקע הכהה מימין */
+.feature {
+  position: relative; display: grid; align-items: center; justify-items: start;
+  min-height: clamp(360px, 38vw, 540px); border-radius: var(--img-radius); overflow: hidden;
+  background: #1f1a17 url("../img/lifestyle/tennis-banner.webp") left center / cover no-repeat;
+  margin-top: 24px;
+}
+.feature::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 45%, rgba(25,20,17,.55) 100%); }
+.feature__text { position: relative; z-index: 1; max-width: 440px; padding: 48px clamp(32px, 6vw, 96px); color: var(--ivory); }
+.feature__text .slogan { color: var(--champagne); }
+.feature__text h2 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: clamp(32px, 3.2vw, 46px); color: #fff; margin: 12px 0 14px; }
+.feature__text p { color: rgba(255,249,246,.82); font-weight: 300; line-height: 1.9; margin: 0 0 28px; }
+.feature { transition: transform 1.2s cubic-bezier(.22,1,.36,1); }
+
+/* שופינג מהתמונה */
+.look__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; max-width: 1080px; margin-inline: auto; }
+.look__media { position: relative; border-radius: var(--img-radius); overflow: hidden; aspect-ratio: 4 / 5; background: var(--sand); }
+.look__media img { width: 100%; height: 100%; object-fit: cover; }
+.look__dot {
+  position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 0; padding: 0;
+  background: rgba(255,255,255,.95); box-shadow: 0 2px 10px rgba(46,42,39,.25); z-index: 2;
+}
+.look__dot::before { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: var(--rose-deep); transition: transform .3s; }
+.look__dot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 1px solid rgba(255,255,255,.9); animation: look-pulse 2.4s ease-out infinite; }
+@keyframes look-pulse { 0% { transform: scale(.7); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+.look__dot.is-hl::before { transform: scale(1.35); }
+.look__tip {
+  position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translate(-50%, 6px);
+  background: var(--surface); color: var(--charcoal); padding: 10px 14px; white-space: nowrap; text-align: center;
+  box-shadow: var(--shadow); opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s; pointer-events: none;
+}
+.look__tip strong { display: block; font-weight: 400; font-size: 14px; }
+.look__tip em { font-style: normal; font-size: 13px; color: var(--mocha); }
+.look__dot:hover .look__tip, .look__dot:focus-visible .look__tip, .look__dot[aria-expanded="true"] .look__tip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.look__side h3 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: clamp(26px, 2.4vw, 34px); margin: 10px 0 8px; }
+.look__side > p { color: var(--muted); margin: 0 0 26px; font-weight: 300; }
+.look__list { border-top: 1px solid var(--line); }
+.look__item { display: grid; grid-template-columns: 72px 1fr auto; gap: 18px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); transition: background .25s, padding .25s; }
+.look__item.is-hl, .look__item:hover { background: var(--surface); padding-inline: 12px; }
+.look__thumb { width: 72px; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid var(--line); }
+.look__thumb img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.look__name { display: block; font-weight: 300; font-size: 16px; }
+.look__info .price { font-size: 14px; color: var(--mocha); }
+.look__go svg { width: 18px; height: 18px; color: var(--taupe); }
+.look__total { display: flex; justify-content: space-between; padding: 18px 0 0; font-size: 15px; color: var(--muted); }
+.look__total strong { font-weight: 400; color: var(--charcoal); }
+
+/* מתנה שמספרת סיפור */
+.gift {
+  display: grid; grid-template-columns: 1.15fr 1fr; align-items: stretch; border-radius: var(--img-radius); overflow: hidden;
+  background: var(--blush); margin-top: 24px;
+}
+.gift__img { order: 2; min-height: 380px; }
+.gift__img img { width: 100%; height: 100%; object-fit: cover; }
+.gift__text { padding: clamp(36px, 5vw, 72px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.gift__text h2 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: clamp(30px, 3vw, 42px); margin: 12px 0 14px; }
+.gift__text p { color: var(--mocha); font-weight: 300; line-height: 1.9; margin: 0 0 28px; max-width: 42ch; }
+
+/* איך לענוד – עמוד מוצר */
+.wear { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); border-radius: var(--img-radius); overflow: hidden; background: #2e2a27; color: var(--ivory); margin-top: 20px; }
+.wear__img { order: 2; aspect-ratio: 4 / 5; max-height: 560px; }
+.wear__img img { width: 100%; height: 100%; object-fit: cover; }
+.wear__text { padding: clamp(36px, 5vw, 72px); display: flex; flex-direction: column; justify-content: center; }
+.wear__text .slogan { color: var(--champagne); }
+.wear__text h2 { font-family: "Frank Ruhl Libre", serif; font-weight: 300; font-size: clamp(28px, 2.8vw, 40px); color: #fff; margin: 12px 0 14px; }
+.wear__text p { color: rgba(255,249,246,.84); font-weight: 300; line-height: 1.9; margin: 0; max-width: 40ch; }
+.wear__text .script { font-size: 38px; color: var(--blush); margin-top: 22px; }
+
+@media (max-width: 860px) {
+  .look__grid { grid-template-columns: 1fr; }
+  .gift, .wear { grid-template-columns: 1fr; }
+  .gift__img, .wear__img { order: 0; }
+  .gift__img { min-height: 0; aspect-ratio: 3 / 2; }
+  .wear__img { max-height: none; aspect-ratio: 4 / 4.4; }
+}
+@media (max-width: 760px) {
+  .feature { min-height: 440px; align-items: end; background-position: 22% center; }
+  .feature::after { background: linear-gradient(180deg, transparent 30%, rgba(25,20,17,.85) 75%); }
+  .feature__text { padding: 30px 24px; }
+}
+.look__media { overflow: visible; }
+.look__media img { border-radius: var(--img-radius); }
+.wear { min-height: 480px; }
+.wear__img { aspect-ratio: auto; max-height: none; min-height: 100%; }
+@media (max-width: 860px) { .wear { min-height: 0; } .wear__img { aspect-ratio: 4 / 4.4; } }
+@media (max-width: 760px) {
+  .feature { min-height: 0; padding-top: 250px; background-size: auto 330px; background-position: 18% 0; background-color: #1f1a17; }
+  .feature::after { background: linear-gradient(180deg, transparent 0, transparent 170px, #1f1a17 330px); }
+}

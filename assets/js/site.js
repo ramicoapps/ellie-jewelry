@@ -25,10 +25,10 @@ const SITE = {
     "More than a jewel · a part of you",
   ],
 
-  // באנרים מתחלפים בראש דף הבית (התמונות מתוך assets/img/products)
+  // באנרים מתחלפים בראש דף הבית (שם קובץ מ-assets/img/products, או נתיב מלא)
   heroSlides: [
     {
-      image: "pear-tennis-bust.webp",
+      image: "assets/img/lifestyle/hero-necklace.webp",
       eyebrow: "More than a jewel · a part of you",
       title: "תכשיטים שמספרים\nאת הסיפור שלך",
       text: "תכשיטי נשים אלגנטיים ומודרניים מרודיום, כסף וגולדפילד, לנשים שאוהבות סטייל, איכות וייופי שמרגיש אישי.",
@@ -42,13 +42,24 @@ const SITE = {
       cta: { label: "לשרשראות", href: "shop.html?cat=necklaces" },
     },
     {
-      image: "lotus-drop-model.webp",
+      image: "assets/img/lifestyle/hero-earrings.webp",
       eyebrow: "עגילים",
       title: "הפרט הקטן\nשעושה את ההבדל",
       text: "הליקס ללא חור, עגילים נופלים ועגילי מחור לחור – לסטייל שהוא רק שלך.",
       cta: { label: "לעגילים", href: "shop.html?cat=earrings" },
     },
   ],
+
+  // "שופינג מהתמונה": נקודות על התכשיטים בתמונה.
+  // x / y = מיקום הנקודה באחוזים (x מצד שמאל, y מלמעלה), id = מזהה המוצר ב-products.js
+  shopTheLook: {
+    image: "assets/img/lifestyle/shop-the-look.webp",
+    items: [
+      { id: "helix-tennis", x: 70, y: 11.5 },
+      { id: "lotus-peer", x: 58.5, y: 25.5 },
+      { id: "collier-square", x: 47, y: 87 },
+    ],
+  },
 
   // שאלות נפוצות בדף הבית
   faq: [
